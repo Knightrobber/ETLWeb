@@ -19,7 +19,7 @@ while(ws[tempString]!=null){
     tempString = String.fromCharCode(startAscii) + "1";
 
 }
-console.log(colCount);
+
 rowCount = rowCount-1;
 for(var i=1;i<=rowCount;++i){
  var temp1,temp2,temp1Type,temp2Type;
@@ -94,7 +94,7 @@ for(var i=1;i<=rowCount;++i){
 
 } 
 
-console.log(ws["I2"].v);
+console.log(ws["I2"].v); // prints value in cell I2
 
 
 let data = xlsx.utils.sheet_to_json(ws);
