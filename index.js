@@ -95,30 +95,13 @@ for(var i=1;i<=rowCount;++i){
 } 
 
 console.log(ws["I2"].v);
-/*console.log(colCount);
-let cell = ws['A3'].v.split(',');
-var cellParts = cell[0].split('-');
-var cellPartsTime = cell[1].split(':');
-//console.log(cellPartsTime[0]);
-var dateObj = new Date('2019','11' -1,'04',cellPartsTime[0]-6 -5 + 12,cellPartsTime[1]-30 -30,cellPartsTime[2] -10);
-var timeObj = cellPartsTime[0] + ':' +  cellPartsTime[1] + ":" + cellPartsTime[2];
-ws["A3"] = {
-    t:'d',
-    v:dateObj
-};
-ws["B2"]={
-    t:'s',
-    v:timeObj
-};
-//console.log(ws['A2']);
-//console.log(ws['A3']);
-*/
+
 
 let data = xlsx.utils.sheet_to_json(ws);
 var newWb = xlsx.utils.book_new();
 var newWs = xlsx.utils.json_to_sheet(data);
 xlsx.utils.book_append_sheet(newWb,ws,"New Data");
-xlsx.writeFile(newWb,"new DataFIle.xlsx");
+xlsx.writeFile(newWb,"new DataFromIndexjs.xlsx");
 
 function formString( i, j){
     var startAscii = 64;
