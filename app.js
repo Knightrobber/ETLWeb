@@ -9,8 +9,8 @@ var startAscii = 65;
 var tempString = 'A1';
 var theString = "A1";
 var iteratorString = "A1";
-
-
+var formidable = require('formidable');
+var tempDate,tempTime;
 
 
 app.use(morgan('short'));
@@ -24,6 +24,10 @@ app.post("/processFile",(req,res)=>{ //  The file is processed here
     console.log("starting file procession");
     var dataFile = req.body.dataFileFromHTML;
     
+   
+
+
+
 let wb = xlsx.readFile(dataFile);
 let ws = wb.Sheets[wb.SheetNames[0]];
 var rowCount =0;
@@ -32,7 +36,17 @@ var startAscii = 65;
 var tempString = 'A1';
 var theString = "A1";
 var iteratorString = "A1";
-var tempDate,tempTime;
+
+
+/*splitData(ws["A2"]);
+console.log("hey")
+console.log(tempTime)
+console.log(ws["A2"]);
+ws["A2"].t = "d"
+ws["A2"].v = tempDate
+ws["B2"].t = "s"
+ws["B2"].v = tempTime
+*/
 
 
 while(ws[tempString]!=null){ // counting no of rows
@@ -78,10 +92,8 @@ for(var i=1;i<=rowCount;++i){
             temp1Type = temp2Type;
              }
         else
-             {   ws[formString(i,j+1)] = {};
-                 ws[formString(i,j+1)].t = temp1Type;
-                 ws[formString(i,j+1)].v = temp1;
-                
+             {   
+                add_cell_to_sheet(ws,formString(i,j+1),temp1,temp1Type);     
              }
 
          
@@ -110,9 +122,7 @@ for(var i=1;i<=rowCount;++i){
                temp1Type = temp2Type;
                }
                else{
-                   ws[formString(i,j+1)]={};
-                   ws[formString(i,j+1)].t = temp1Type;
-                   ws[formString(i,j+1)].v = temp1;
+                add_cell_to_sheet(ws,formString(i,j+1),temp1,temp1Type);    
                    
                    
                }
@@ -128,11 +138,15 @@ for(var i=1;i<=rowCount;++i){
 } 
 
 // creating a new file with updated cell values
-let data = xlsx.utils.sheet_to_json(ws); 
+
 var newWb = xlsx.utils.book_new();
-var newWs = xlsx.utils.json_to_sheet(data);
+
 xlsx.utils.book_append_sheet(newWb,ws,"New Data");
+
 xlsx.writeFile(newWb,"new Data.xlsx");
+var data = xlsx.utils.sheet_to_json(newWb.Sheets['New Data']);
+console.log(data[2])
+
 
 
     res.end()
@@ -158,4 +172,29 @@ function splitData(data){ // splits data
     tempDate = dateObj;
     tempTime = timeObj;
     
+
+    
+}
+
+function add_cell_to_sheet(worksheet, address, value,type) {
+	/* cell object */
+	var cell = {t:'?', v:value};
+
+	/* assign type */
+	cell.t = type
+	/* add to worksheet, overwriting a cell if it exists */
+	worksheet[address] = cell;
+
+	/* find the cell range */
+	var range = xlsx.utils.decode_range(worksheet['!ref']);
+	var addr = xlsx.utils.decode_cell(address);
+
+	/* extend the range to include the new cell */
+	if(range.s.c > addr.c) range.s.c = addr.c;
+	if(range.s.r > addr.r) range.s.r = addr.r;
+	if(range.e.c < addr.c) range.e.c = addr.c;
+	if(range.e.r < addr.r) range.e.r = addr.r;
+
+	/* update range */
+	worksheet['!ref'] = xlsx.utils.encode_range(range);
 }
