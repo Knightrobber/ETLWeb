@@ -129,13 +129,13 @@ for(var i=1;i<=rowCount;++i){
 
 } 
 
-/*
+
 let data = xlsx.utils.sheet_to_json(ws);
 var newWb = xlsx.utils.book_new();
 var newWs = xlsx.utils.json_to_sheet(data);
 xlsx.utils.book_append_sheet(newWb,ws,"New Data");
-xlsx.writeFile(newWb,"new DataFIleeeee.xlsx");
-*/
+xlsx.writeFile(newWb,"new Data.xlsx");
+
 
     res.end()
 })
